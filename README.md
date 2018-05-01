@@ -1,4 +1,4 @@
-# Voluntinder
+# uVolunteer
 
 Voluntinder is a platform which tries to pair altruistic, good natured people with some extra time to kill, and volunteering oportunities nearby.
 
