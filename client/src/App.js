@@ -17,7 +17,8 @@ const PrivateRoute = ({component: Component, ...rest}) => (
     {...rest}
 
     render={(props) => {
-      console.log('here are rest',...rest);
+      console.log('Auth', Auth);
+      // console.log('here are rest',...rest);
       console.log('here are props', props);
       return (
         Auth.isAuthenticated === true ? (

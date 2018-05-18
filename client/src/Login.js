@@ -8,30 +8,33 @@ import moment from 'moment-timezone';
 
 class Login extends React.Component {
   constructor(props) {
+    console.log('LOGIN');
     super(props);
 
     this.handleUsernameInput = this.handleUsernameInput.bind(this);
     this.handlePasswordInput = this.handlePasswordInput.bind(this);
     this.login = this.login.bind(this);
-    this.responseGoogle = this.responseGoogle.bind(this);
+    // this.responseGoogle = this.responseGoogle.bind(this);
     this.state = {
       props: props,
       redirectToReferrer: false,
       username: '',
       password: '',
     };
-    
+
   }
 
   responseGoogle(response) {
+    debugger;
     console.log(response.profileObj)
-    axios.post('/googleLogin', response.profileObj)
-    .then((res) => {
-      Auth.isAuthenticated = true;
-      Auth.username = res.data.username;
-      Auth.password = res.data.password;
-      this.setState({redirectToReferrer: true})
-    })
+
+      axios.post('/googleLogin', response.profileObj)
+      .then((res) => {
+        Auth.isAuthenticated = true;
+        Auth.username = res.data.username;
+        Auth.password = res.data.password;
+        this.setState({redirectToReferrer: true})
+      })
   }
 
   login() {
@@ -68,6 +71,7 @@ class Login extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     const {redirectToReferrer} = this.state;
 
     if (redirectToReferrer) {
@@ -81,7 +85,7 @@ class Login extends React.Component {
         <div className="ui middle aligned center aligned grid">
           <div className="column" style={{maxWidth: '450px'}}>
             <h2 className="ui blue image header">
-              <div className="content">Log-in to Home To Volunteer</div>
+              <div className="content">Log-in to uVolunteer</div>
             </h2>
             <div className="ui large form">
               <div className="ui stacked segment">
@@ -122,12 +126,12 @@ class Login extends React.Component {
                 New Volunteer? Register NOW!
               </Link>
             </div>
-            <GoogleLogin
-              clientId="328482894747-0eo5s342dm8heupoemvanntj2tqnhfjt.apps.googleusercontent.com"
+            {/* <GoogleLogin
+              clientId="328482894747-igpb1a9uppg0906r03radh7ll1qlnftm.apps.googleusercontent.com"
               buttonText="Google Login"
               onSuccess={this.responseGoogle}
               onFailure={this.responseGoogle}
-            />
+            /> */}
           </div>
         </div>
       </div>

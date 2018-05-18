@@ -5,7 +5,7 @@ const CronJob = require('cron').CronJob;
 const Sequelize = require('sequelize');
 const axios = require('axios');
 const Op = Sequelize.Op;
-const db = require('./database/models.js').db;
+// const db = require('./database/models.js').db;
 const {User, Task, UserTasks, Organization, UserOrg, UserTaskDist} = require('./database/models.js');
 const session = require('express-session');
 
@@ -44,6 +44,7 @@ const isLoggedIn = function(req) {
 };
 
 const isAuthorized = function(req, res, next) {
+  console.log('isAuthorized', req);
   if (!isLoggedIn(req)) {
     res.redirect('/login');
   } else {
@@ -57,7 +58,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 // Declare static files
-app.use(express.static(__dirname + '/../client/build'));
+app.use(express.static(__dirname + '/../client/public'));
 
 // ROUTES --------------------------------------------------
 
@@ -65,8 +66,7 @@ app.use(express.static(__dirname + '/../client/build'));
 // to this user.
 
 app.post('/login', function(req, res) {
-  console.log('req.body.username: ', req.body.username);
-  console.log('req.body.password: ', req.body.password);
+  console.log('LLLLOOOOOGGGIINNN')
   User.find({
     where: {
       username: req.body.username,
@@ -257,7 +257,6 @@ app.get('/users/:username', function(req, res) {
       data.map(task => {
         arrayOfTasks.push(task.dataValues.TaskId);
       });
-      console.log(arrayOfTasks);
       res.send(arrayOfTasks);
     });
   });
@@ -265,15 +264,14 @@ app.get('/users/:username', function(req, res) {
 
 // Returns all tasks from the database.
 app.get('/tasks/all', function(req, res) {
-  console.log('tasks/all calling')
   Task.findAll().then(results => {
-    console.log('results in tasks/all', results)
     res.send(results);
   });
 });
 
 
 app.get('/tasks', function(req, res) {
+  console.log('TTTAAASSSKKKSS', req.query);
   User.findOne({
     where: {
       username: req.query.username,
@@ -360,16 +358,13 @@ app.get('/tasks/:taskId', function(req, res) {
 // Assign the :taskId task to the current user. Triggered when a user
 // accepts/applies to a task.
 app.post('/tasks/:taskId/accept', function(req, res) {
-  console.log('--------', req.body.username);
   User.find({
     where: {
       username: req.body.username,
     },
   }).then(data => {
-    console.log(data);
     var UserID = data.dataValues.id.toString();
     var TaskID = req.params.taskId.toString();
-    console.log('IDS---', data.dataValues);
     UserTasks.find({
       where: {
         UserId: UserID,
@@ -400,7 +395,6 @@ app.post('/tasks/:taskId/accept', function(req, res) {
 app.post('/tasks/:taskId/reject', function(req, res) {
   var UserName = req.body.username;
   var TaskID = req.params.taskId.toString();
-  console.log('------', req.session.user);
   User.find({
     where: {
       username: UserName,
@@ -413,13 +407,11 @@ app.post('/tasks/:taskId/reject', function(req, res) {
       },
     })
       .then(data => {
-        console.log('about to destroy it');
         return UserTasks.destroy({
           where: {
             id: data.dataValues.id,
           },
         });
-        console.log('just destroyed it');
       })
       .then(data => {
         Task.findById(TaskID)
@@ -440,7 +432,6 @@ app.post('/tasks/:taskId/delete', function(req, res) {
       id: TaskID
     }
   }).then(task => {
-    console.log('this is task', task)
     task.destroy()
   }).then(() => {
     res.send('DELETED');
@@ -454,7 +445,6 @@ app.post('/tasks/:taskId/complete', function(req, res) {
       id: TaskID
     }
   }).then(task => {
-    console.log('\n----this is task----\n', task.dataValues)
     task.completed = 1;
     task.save();
   }).then(() => {
@@ -565,7 +555,6 @@ app.get('/orgs/:orgname', function(req, res) {
       name: req.params.orgname
     }
   }).then(data => {
-    console.log('orororororrggg name', data);
     res.send(data);
   }).catch(err => {
     console.log('here is the error 1',err);
@@ -626,6 +615,6 @@ app.post('/zip', (req, res) => {
 
 let port = process.env.PORT || 3001;
 
-app.listen(port, function() {
+app.listen(3001, function() {
   console.log(`listening on port ${port}`);
 });

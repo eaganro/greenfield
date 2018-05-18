@@ -175,6 +175,7 @@ class Home extends React.Component {
   }
 
   render() {
+    console.log('HHHHEEEERRRREEEE', this.state.tasks);
     var taskList = this.state.tasks.slice();
     taskList=taskList.filter(t=>t.completed === false)
     return (
@@ -254,7 +255,7 @@ class Home extends React.Component {
           <script
             async
             defer
-            src={`https://maps.googleapis.com/maps/api/js?key=AIzaSyBH-6-MO2reXrAZ4fDQuzkOghyIBPkLyhE&callback=initMap`}
+            src={`https://maps.googleapis.com/maps/api/js?key=AIzaSyBUGKUTSaGKA_5BoV0rIUNYeBm53JzZld0&callback=initMap`}
             type="text/javascript"
           />
           <div
@@ -263,7 +264,7 @@ class Home extends React.Component {
           >
             <GoogleMaps
               isMarkerShown
-              googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyBH-6-MO2reXrAZ4fDQuzkOghyIBPkLyhE&v=3.exp&libraries=geometry,drawing,places"
+              googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUGKUTSaGKA_5BoV0rIUNYeBm53JzZld0&v=3.exp&libraries=geometry,drawing,places"
               loadingElement={<div style={{height: `100%`}} />}
               containerElement={<div style={{height: `100%`}} />}
               mapElement={<div style={{height: `100%`}} />}
